@@ -1,0 +1,9 @@
+# Enviroment
+/env
+
+# Bytecode py
+*.pyc
+*.pyo
+
+# TestFolder
+/test
