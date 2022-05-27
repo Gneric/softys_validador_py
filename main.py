@@ -12,6 +12,8 @@ rts = Routes()
 api.add_resource(rts._token, '/api/getToken')
 
 # # Protected
+# Templates
+api.add_resource(rts._getTemplate, '/api/protected/getTemplate')
 # Data
 api.add_resource(rts._validateData, '/api/protected/validateData')
 api.add_resource(rts._insertData, '/api/protected/insertData')
