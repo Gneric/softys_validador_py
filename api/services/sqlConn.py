@@ -2,12 +2,12 @@ import string, sys, urllib, pyodbc
 import sqlalchemy as sa
 import pandas as pd
 
-from api.constants.sql_config import connection_string
+from api.config.sql_config import connection_string
+
 from api.constants.sql_tables_info import tables_info, carga_info
 
 
 # Execute procedure
-
 def insertToTable(df : pd.DataFrame ):
     try:
         connection_uri = f"mssql+pyodbc:///?odbc_connect={urllib.parse.quote_plus(connection_string)}"

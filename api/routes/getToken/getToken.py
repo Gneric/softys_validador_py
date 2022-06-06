@@ -2,7 +2,8 @@ from flask_jwt_extended import create_access_token
 from flask_restful import Resource
 from flask import request
 
-from api.constants.api_user_config import config
+from api.services.mySqlConn import checkUser
+from api.config.sql_config import getCredentials
 
 class getToken(Resource):
     def post(self):
@@ -12,11 +13,16 @@ class getToken(Resource):
 
             usr = request.json.get('user', None)
             pwd = request.json.get('password', None)
+            user_type = request.json.get('userType', None)
 
-            if usr != config.get('user') or pwd != config.get('password'):
+            if user_type == "":
+                return { 'error': 'userTypeError' }, 400
+            clientID = checkUser(usr, pwd)
+            if clientID == 0:
                 return { 'error': 'credential error' }, 400
-
-            access_token = create_access_token(identity=str(usr))
+            db_creds = getCredentials(clientID)
+            identity_token = { 'user': usr, 'clientID': clientID, 'credentials': db_creds }
+            access_token = create_access_token(identity=str(identity_token))
             
             return { 'result': { 'usr': usr, 'access_token': access_token } }, 200
         except Exception as err:

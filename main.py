@@ -9,16 +9,28 @@ rts = Routes()
 
 
 # # Public
-api.add_resource(rts._token, '/api/getToken')
+api.add_resource(rts._token, '/api/getToken') # En el token debe estar los datos de conexion y el role del usuario
 
 # # Protected
+# Structure
+api.add_resource(rts._getStructure, '/api/protected/structure/getStructure')
+# api.add_resource(rts._createItem, '/api/protected/structure/createItem') # Recibe un value con la tabla objetivo + un object con su estructura / retorna json de la estructura completa
+# api.add_resource(rts._deleteItem, '/api/protected/structure/deleteItem') # Recibe un value con la tabla objetivo + id del objeto a eliminar / retorna json de la estructura completa
+# api.add_resource(rts._updateItem, '/api/protected/structure/updateItem') # Recibe un value con la tabla objetivo + un object con su estructura / retorna json de la estructura completa
+
 # Templates
-api.add_resource(rts._getTemplate, '/api/protected/getTemplate')
+api.add_resource(rts._getTemplate, '/api/protected/templates/getTemplate') # Recibe id de la estructura de validacion / retorna excel
+
 # Data
-api.add_resource(rts._validateData, '/api/protected/validateData')
-api.add_resource(rts._insertData, '/api/protected/insertData')
+api.add_resource(rts._validateData, '/api/protected/dataVal/validateData') # Recibe id de la estructura de validacion + data / retorna un listado de errors o un totalizado con ok
+api.add_resource(rts._insertData, '/api/protected/dataVal/insertData') # Recibe el nombre de la tabla SQL a la que ingresara + data / retorna un ok o error
+
 # Alerts
-api.add_resource(rts._alerts, '/api/protected/getAlerts')
+api.add_resource(rts._alerts, '/api/protected/alerts/getAlerts') # ?
+
+# Maestros
+# api.add_resource(rts._listDD,'/api/protected/masters/listDD') # Retorna listado de datos distribuidoras segun conexion
+# api.add_resource(rts._crudDD,'/api/protected/masters/crudDD') # Recibe Array de objetos tipo distribuidora + una key: 'delete', 'add', 'update' la cual dictara que hara el procedure / retorn ok o listado de errores
 
 if __name__ == "__main__":
     #serve(app, host="0.0.0.0", port=3100, threads=8) # Solo para produccion
