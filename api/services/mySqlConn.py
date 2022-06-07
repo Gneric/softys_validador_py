@@ -64,7 +64,7 @@ def getProcessStructure(procID):
         cursor.close()
         del cursor
         conn.close()
-        return result[0][0]
+        return result
     except Exception as err:
         print(f'Error check {getProcessStructure.__name__}', err, sys.exc_info())
         return False
