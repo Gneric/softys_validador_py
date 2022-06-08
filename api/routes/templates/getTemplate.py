@@ -29,7 +29,7 @@ class downloadTemplate(Resource):
                 return { 'error': 'Error en la busqueda del proceso' }, 400
             
             xlsx = createTemplate(structure)
-            if xlsx == False:
+            if xlsx == '':
                 return { 'error': 'Error en la creacion de la plantilla' }, 400
 
             data_path = join(getcwd(),'files')
