@@ -12,7 +12,8 @@ class insertData(Resource):
         if 'data' in request.json.keys():
             data = request.json.get('data', [])
             if len(data) < 1:
-                return { "error" : "La data adjunta se encuentra vacia" }, 400        
+                return { "error" : "La data adjunta se encuentra vacia" }, 400     
+                         
             response = sendData(data)
             return response
         else:
