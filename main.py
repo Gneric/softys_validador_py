@@ -13,7 +13,7 @@ api.add_resource(rts._token, '/api/getToken') # En el token debe estar los datos
 
 # # Protected
 # Roles
-# # api.add_resource(rts._getRoles, '/api/protected/roles/getRoles')
+api.add_resource(rts._getRoles, '/api/protected/roles/getRoles')
 # Structure
 api.add_resource(rts._getStructure, '/api/protected/structure/getStructure')
 # api.add_resource(rts._createItem, '/api/protected/structure/createItem') # Recibe un value con la tabla objetivo + un object con su estructura / retorna json de la estructura completa
@@ -24,8 +24,8 @@ api.add_resource(rts._getStructure, '/api/protected/structure/getStructure')
 api.add_resource(rts._getTemplate, '/api/protected/templates/getTemplate') # Recibe id de la estructura de validacion / retorna excel
 
 # Data
-# # api.add_resource(rts._validateData, '/api/protected/dataVal/validateData') # Recibe id de la estructura de validacion + data / retorna un listado de errors o un totalizado con ok
-# # api.add_resource(rts._insertData, '/api/protected/dataVal/insertData') # Recibe el nombre de la tabla SQL a la que ingresara + data / retorna un ok o error
+api.add_resource(rts._validateData, '/api/protected/dataVal/validateData') # Recibe id de la estructura de validacion + data / retorna un listado de errors o un totalizado con ok
+api.add_resource(rts._insertData, '/api/protected/dataVal/insertData') # Recibe el nombre de la tabla SQL a la que ingresara + data / retorna un ok o error
 
 # Alerts
 # # api.add_resource(rts._alerts, '/api/protected/alerts/getAlerts') # ?

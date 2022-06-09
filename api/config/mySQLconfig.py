@@ -12,4 +12,5 @@ mysql_procedures = {
     "checkProcessID": "CALL SP_verifyProcessID (%(procID)s);",
     "getProcessStructure": "CALL SP_getProcessStructure (%(procID)s);",
     "getWholeStructure": "CALL SP_getJSONStructure (%(cliID)s);",
+    "checkRoles": "CALL SP_getRoles (%(cliID)s);",
 }

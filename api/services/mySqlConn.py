@@ -27,6 +27,23 @@ def checkUser(user, pwd):
         print(f'Error {checkUser.__name__}', err, sys.exc_info())
         return 0
 
+def checkRoles(cliID):
+    try: 
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
+        cursor = conn.cursor()
+        query = mysql_procedures.get(checkRoles.__name__)
+        print(f'Executing {checkRoles.__name__} with {cliID}')
+        cursor.execute(query, { 'cliID': cliID })
+        result = cursor.fetchall()
+        roles = json.loads(result[0][0])
+        cursor.close()
+        del cursor
+        conn.close()
+        return roles
+    except Exception as err:
+        print(f'Error check {checkRoles.__name__}', err, sys.exc_info())
+        return '' 
+
 def checkProcessID(procID):
     try:
         conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
