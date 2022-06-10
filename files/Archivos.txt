@@ -1,0 +1,4 @@
+LOG DE ARCHIVOS
+ Creacion de template - Archivo : 3_Maestro Masivos test.xlsx - 2022-06-09 10:33:45.454529
+ Creacion de template - Archivo : 2_Data test.xlsx - 2022-06-09 10:39:17.360156
+ Creacion de template - Archivo : 3_Maestro Masivos test.xlsx - 2022-06-10 09:05:45.850595

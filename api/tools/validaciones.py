@@ -1,6 +1,7 @@
+from datetime import datetime
 import pandas as pd
-import json
-import sys
+import json, sys
+
 
 from api.constants.data_types import data_examples
 
@@ -14,68 +15,60 @@ def validateEmpty(value, column_name):
         } 
 
 # Validar type
-def validateType(value, example, column_name):
-    if value != example:
+def validateType(value, valueType, column_name):
+    if valueType in ('date','string'):
+        valueType = 'str'
+    if value.__name__ != valueType:
         return {
             'column': column_name,
             'error_type': 'Error en tipo de dato',
-            'error_message': f'El tipo de dato es erroneo, se espero {example.__name__} pero se envio {value.__name__}'
+            'error_message': f'El tipo de dato es erroneo, se espero {valueType} pero se envio {value.__name__}'
         }
-
-def validateTotal(price, qty, total, column_name):
-    if price * qty != total:
-        return {
-            'column': column_name,
-            'error_type': 'Error en totalizado',
-            'error_message': 'El totalizado sin IGV no concuerda con la cantidad * precio Unitario'
-        }
-    else:
-        return False
-
-def validateDevolution(doc, total, column_name):
-    if 'NC' in doc and total > 0:
-        return {
-            'column': column_name, 
-            'error_type': 'Nota de credito con totalizado erroneo', 
-            'error_message': 'Las notas de credito solo puede contener totalizados negativos'
-        }
-    else:
-        return False
 
 # Validar row
-def validateDF(df: pd.DataFrame):
+def validateDF(json_df, structure):
     errors = []
-    sjson_df = df.to_json(orient="records")
-    json_df = json.loads(sjson_df)
     index = 0
     for row in json_df:
         try:
             row_num = index + 1
             row_errors = []
-
             # Revision de data por item
             for column_name, value in row.items():
-                optional = data_examples.get(column_name).get('optional')
-                example = data_examples.get(column_name).get('example')
+                filtered_structure = list(filter(lambda obj: obj.get('columnName') == column_name, structure))[0]
+                optional = filtered_structure.get('optional')
+                valueType = filtered_structure.get('columnType')
 
-                if optional == False or (optional == True and value != ""):
+                if optional == False or (optional == True and value != ""):                                                       
+                    # Validaciones comunes
                     checkEmpty = validateEmpty(value, column_name)
                     if checkEmpty != False: 
                         row_errors.append(checkEmpty)
-                    checkType = validateType(type(value), type(example), column_name)
+                    checkType = validateType(type(value), valueType, column_name)
                     if checkType != False: 
                         row_errors.append(checkType)
 
-            # Revision de data por fila
-            check_dev = validateDevolution(row.get('Nro Factura'), row.get('Precio Total sin IGV'), 'Precio Total sin IGV')
-            # print(f'validateDevolution : {check_dev}')
-            if check_dev != False: 
-                row_errors.append(check_dev)
-
-            check_total = validateTotal(row.get('Precio Unitario'), row.get('Cantidad'), row.get('Precio Total sin IGV'), 'Precio Total sni IGV')
-            # print(f'validateTotal : {check_total}')
-            if check_total != False: 
-                row_errors.append(check_total)
+            # Custom Validations
+            custom_val_structure = list(filter(lambda obj: obj.get('customValidation') == 1, structure))
+            for cvs_row in custom_val_structure:
+                csv_row_name = cvs_row.get('columnName')
+                raw_query = cvs_row.get('customValidationQuery')
+                error_message = cvs_row.get('errorMessage')
+                query = 'True if ' + raw_query.replace("{","row.get('").replace("}","')") + ' else False '
+                try:
+                    result_query = exec(query)
+                except:
+                    row_errors.append({
+                        'column': 'customValidation',
+                        'error_type': 'Error en la query',
+                        'error_message': f'La query ingresada es erronea'
+                    })
+                if result_query == False:
+                    row_errors.append({
+                        'column': csv_row_name,
+                        'error_type': 'customValidation Error',
+                        'error_message': f'{error_message}'
+                    })
 
             row_errors = [i for i in row_errors if i]
             if len(row_errors) > 0:

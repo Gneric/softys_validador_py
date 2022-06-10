@@ -13,15 +13,15 @@ class getToken(Resource):
 
             usr = request.json.get('user', None)
             pwd = request.json.get('password', None)
-            user_type = request.json.get('userType', None)
+            userInfo = request.json.get('userInfo', None)
 
-            if user_type == "":
+            if userInfo == {}:
                 return { 'error': 'userTypeError' }, 400
             clientID = checkUser(usr, pwd)
             if clientID == 0:
                 return { 'error': 'credential error' }, 400
             db_creds = getCredentials(clientID)
-            identity_token = { 'user': usr, 'clientID': clientID, 'credentials': db_creds }
+            identity_token = { 'user': usr, 'user_info': userInfo, 'clientID': clientID, 'credentials': db_creds }
             access_token = create_access_token(identity=str(identity_token))
             
             return { 'result': { 'usr': usr, 'access_token': access_token } }, 200

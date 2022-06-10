@@ -119,3 +119,54 @@ def getWholeStructure(cliID):
     except Exception as err:
         print(f'Error check {getWholeStructure.__name__}', err, sys.exc_info())
         return False 
+
+def getGroups(cliID):
+    try: 
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
+        cursor = conn.cursor()
+        query = mysql_procedures.get(getGroups.__name__)
+        print(f'Executing {getGroups.__name__} with {cliID}')
+        cursor.execute(query, { 'cliID': cliID })
+        result = cursor.fetchall()
+        structure = json.loads(result[0][0])
+        cursor.close()
+        del cursor
+        conn.close()
+        return structure
+    except Exception as err:
+        print(f'Error check {getGroups.__name__}', err, sys.exc_info())
+        return False 
+
+def getProcesses(grpID):
+    try: 
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
+        cursor = conn.cursor()
+        query = mysql_procedures.get(getProcesses.__name__)
+        print(f'Executing {getProcesses.__name__} with {grpID}')
+        cursor.execute(query, { 'grpID': grpID })
+        result = cursor.fetchall()
+        structure = json.loads(result[0][0])
+        cursor.close()
+        del cursor
+        conn.close()
+        return structure
+    except Exception as err:
+        print(f'Error check {getProcesses.__name__}', err, sys.exc_info())
+        return False 
+
+def getValidations(processID):
+    try: 
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
+        cursor = conn.cursor()
+        query = mysql_procedures.get(getValidations.__name__)
+        print(f'Executing {getValidations.__name__} with {processID}')
+        cursor.execute(query, { 'processID': processID })
+        result = cursor.fetchall()
+        structure = json.loads(result[0][0])
+        cursor.close()
+        del cursor
+        conn.close()
+        return structure
+    except Exception as err:
+        print(f'Error check {getValidations.__name__}', err, sys.exc_info())
+        return False 

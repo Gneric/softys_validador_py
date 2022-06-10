@@ -1,36 +1,41 @@
-from concurrent.futures.thread import _worker
 import json
-import pandas as pd
+import os
 import xlsxwriter
-
 
 
 def createTemplate(structure):
     try:
-        print('----------------')
         data = json.loads(structure[0][0])
         validata = data.get('validationData')
         processName = data.get("processName")
-        filename = f'{processName}.xlsx'
-        workbook = xlsxwriter.Workbook(f'files/{filename}')
+        processID = validata[0].get('processID')
+        filename = f'{processID}_{processName}.xlsx'
+        filepath = f'files/{filename}'
+
+        # Delete if exists
+        if os.path.exists(filepath):
+            print(f'Deleting {filename}')
+            os.remove(filepath)
+
+        workbook = xlsxwriter.Workbook(filepath, {'in_memory': True})
         data_ws = workbook.add_worksheet('data')
-        # Formato texto
+        # Formato string
         text_format = workbook.add_format()
         text_format.set_num_format('@')
-        # Formato entero
+        # Formato int
         int_format = workbook.add_format()
         int_format.set_num_format('#')
-        # Formato numeric
-        num_format = workbook.add_format()
-        num_format.set_num_format('#,##0.00')
-        # Formato fecha
+        # Formato float
+        float_format = workbook.add_format()
+        float_format.set_num_format('#,##0.00')
+        # Formato date
         date_format = workbook.add_format()
         date_format.set_num_format('d/mm/yyyy')
 
         format_selector = {
             'string': text_format,
             'int': int_format,
-            'numeric': num_format,
+            'float': float_format,
             'date': date_format
         }
         
@@ -42,8 +47,9 @@ def createTemplate(structure):
                 width=20, 
                 cell_format=format_selector.get(row.get('columnType'))
             )
+
+        
         workbook.close()
-        print('----------------')
         return filename
     except Exception as err:
         print('Error in createTemplate :', err)
