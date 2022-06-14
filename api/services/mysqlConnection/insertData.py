@@ -19,3 +19,21 @@ def upsertGroupInfo(jsonData):
         print(f'Error check {upsertGroupInfo.__name__}', err, sys.exc_info())
         return False
 
+def createNewGroup(data, clientID):
+    try:
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
+        query = mysql_procedures.get(createNewGroup.__name__)
+        for row in data:
+            cursor = conn.cursor()
+            cursor.execute(query, { 'grpName': row.get('groupName'), 'cliID': clientID, 'isEnabled': 1 })
+            result = cursor.fetchall()
+            cursor.close()
+            del cursor
+            conn.close()
+        return True
+    except Exception as err:
+        print(f'Error check {createNewGroup.__name__}', err, sys.exc_info())
+        return False
+
+    
+

@@ -36,7 +36,7 @@ def validateDF(json_df, structure):
                 optional = filtered_structure.get('optional')
                 valueType = filtered_structure.get('columnType')
 
-                if optional == 0 or (optional == 1 and value != ""):                                                       
+                if optional == 0 or (optional == 1 and value not in ("", 0, None)):                                                       
                     # Validaciones comunes
                     checkEmpty = validateEmpty(value, column_name)
                     if checkEmpty != False: 

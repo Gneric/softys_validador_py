@@ -3,8 +3,10 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 import json, sys
 
+from api.services.mysqlConnection.insertData import createNewGroup
 
-class upsertGroup(Resource):
+
+class createGroup(Resource):
     @jwt_required()
     def post(self):
         try:
@@ -15,11 +17,20 @@ class upsertGroup(Resource):
             if data == "":
                 return { 'error': 'data enviada vacia' }, 400
 
-            
+            token = get_jwt_identity()
+            dquoted = json.dumps(eval(token))
+            json_token = json.loads(dquoted)
+            clientID = json_token.get('clientID')
+
+            result = createNewGroup(data, clientID)
+            if result == "":
+                return { 'error': 'error en la creacion de un nuevo grupo' }, 400
+
+            return result, 200            
         except:
             print(sys.exc_info())
 
-class upsertProcess(Resource):
+class createNewProcess(Resource):
     @jwt_required()
     def post(self):
         try:

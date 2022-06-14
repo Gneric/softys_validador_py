@@ -23,4 +23,14 @@ class Routes():
         self._getSingleProcess = route_getStructure.getSingleProcess
         self._getSingleGroup = route_getStructure.getSingleGroup
 
+        # self._createGroup
+        # self._createProcess
+
+        # self._updateGroupInfo
+        # self._updateProcessInfo
+        # self._updateValidationInfo
+
+        # self._disableGroup
+        # self._disableProcess
+        
         self._getRoles = route_getRoles.getRoles

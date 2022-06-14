@@ -5,20 +5,27 @@ PWD = "V1d4S0ftw4r3!"
 DB = "strtg_autoservice"
 MULTIPLESTATEMENTS = True
 
-#mysql_connection_string = ("DRIVER={MySQL ODBC 8.0 ANSI Driver};"+f"SERVER={HOST};DATABASE={DB};UID={USER}; PWD={PWD};")
-#mysql_connector_string = (f"host={HOST}, database={DB}, user={USER}, password={PWD}")
 mysql_procedures = {
+    # DataCheck
     "checkUser": "CALL SP_UserCheck (%(user)s, %(pwd)s);",
     "checkProcessID": "CALL SP_verifyProcessID (%(procID)s);",
     "checkRoles": "CALL SP_getRoles (%(cliID)s);",
-
+    # DataGet
     "getProcessStructure": "CALL SP_getProcessStructure (%(procID)s);",
     "getWholeStructure": "CALL SP_getJSONStructure (%(cliID)s);",
     "getGroups": "CALL SP_getGroups (%(cliID)s);",
     "getProcesses": "CALL SP_getProcesses (%(grpID)s);",
     "getValidations": "CALL SP_getValidation (%(processID)s);",
-    "getProcessInfo": "CALL SP_getProcessInfo (%(processID)s);",
-    "getGroupInfo": "CALL SP_getGroupInfo (%(groupID)s);",
-
-    
+    # DataGetSingle
+    "getProcessInfo": "CALL SP_getProcessInfo (%(procID)s);",
+    "getGroupInfo": "CALL SP_getGroupInfo (%(grpID)s);",
+    # InsertNewItem
+    "createNewGroup": "CALL SP_createNewGroup (%(grpName)s, %(cliID)s, %(isEnabled)s);",
+    "createNewProcess": "CALL SP_createNewProcess (%(prTypeID)s, %(grpID)s, %(prName)s,  %(isEnabled)s);",
+    "createNewValidation": "CALL SP_createNewValidation (%(prID)s, %(clName)s, %(clNumber)s, %(clType)s, %(opt)s, %(cliID)s, %(customVal)s, %(customValQuery)s, %(errMsg)s);",
+    # UpdateItem
+    "updateGroupInfo": "",
+    "updateProcessInfo": "",
+    "updateValidationInfo": "",
+    # DeleteItem
 }
