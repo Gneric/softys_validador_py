@@ -10,10 +10,15 @@ MULTIPLESTATEMENTS = True
 mysql_procedures = {
     "checkUser": "CALL SP_UserCheck (%(user)s, %(pwd)s);",
     "checkProcessID": "CALL SP_verifyProcessID (%(procID)s);",
+    "checkRoles": "CALL SP_getRoles (%(cliID)s);",
+
     "getProcessStructure": "CALL SP_getProcessStructure (%(procID)s);",
     "getWholeStructure": "CALL SP_getJSONStructure (%(cliID)s);",
     "getGroups": "CALL SP_getGroups (%(cliID)s);",
     "getProcesses": "CALL SP_getProcesses (%(grpID)s);",
     "getValidations": "CALL SP_getValidation (%(processID)s);",
-    "checkRoles": "CALL SP_getRoles (%(cliID)s);",
+    "getProcessInfo": "CALL SP_getProcessInfo (%(processID)s);",
+    "getGroupInfo": "CALL SP_getGroupInfo (%(groupID)s);",
+
+    
 }

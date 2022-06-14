@@ -2,7 +2,7 @@ import json
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 
-from api.services.mySqlConn import checkRoles
+from api.services.mysqlConnection.checkData import checkRoles
 
 class getRoles(Resource):
     @jwt_required()

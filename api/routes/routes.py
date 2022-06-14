@@ -11,10 +11,16 @@ class Routes():
     def __init__(self):
         self._token = route_token.getToken
         self._alerts = route_alertas.getAlerts
+        
         self._insertData = route_insertData.insertData
         self._validateData = route_validateData.validateData
+
         self._getTemplate = route_template.downloadTemplate
         self._getGroups = route_getStructure.getListGroups
         self._getProcesses = route_getStructure.getListProcesses
         self._getValidations = route_getStructure.getListValidations
+
+        self._getSingleProcess = route_getStructure.getSingleProcess
+        self._getSingleGroup = route_getStructure.getSingleGroup
+
         self._getRoles = route_getRoles.getRoles

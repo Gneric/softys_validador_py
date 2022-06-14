@@ -1,7 +1,7 @@
 import json
 
 from api.constants.sql_tables_info import tables_info
-from api.services.sqlConn import executeProcedure
+from api.services.sqlConnection.sqlConn import executeProcedure
 
 def requestAlertMaestroCustomTable(target_table):
     if target_table not in tables_info.keys():

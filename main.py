@@ -19,6 +19,9 @@ api.add_resource(rts._getRoles, '/api/protected/roles/getRoles')
 api.add_resource(rts._getGroups, '/api/protected/structure/getGroups')
 api.add_resource(rts._getProcesses, '/api/protected/structure/getProcesses')
 api.add_resource(rts._getValidations, '/api/protected/structure/getValidations')
+
+api.add_resource(rts._getSingleProcess, '/api/protected/structure/getSingleProcess')
+api.add_resource(rts._getSingleGroup, '/api/protected/structure/getSingleGroup')
 # api.add_resource(rts._createItem, '/api/protected/structure/createItem') # Recibe un value con la tabla objetivo + un object con su estructura / retorna json de la estructura completa
 # api.add_resource(rts._deleteItem, '/api/protected/structure/deleteItem') # Recibe un value con la tabla objetivo + id del objeto a eliminar / retorna json de la estructura completa
 # api.add_resource(rts._updateItem, '/api/protected/structure/updateItem') # Recibe un value con la tabla objetivo + un object con su estructura / retorna json de la estructura completa

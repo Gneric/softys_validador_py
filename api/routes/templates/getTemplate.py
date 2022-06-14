@@ -6,7 +6,8 @@ from flask_restful import Resource
 from flask import request
 from os.path import join
 
-from api.services.mySqlConn import checkProcessID, getProcessStructure
+from api.services.mysqlConnection.checkData import checkProcessID
+from api.services.mysqlConnection.getData import getProcessStructure
 from api.tools.createTemplate import createTemplate
 
 from datetime import datetime
@@ -42,6 +43,7 @@ class downloadTemplate(Resource):
                 file_object.write(f"\n Creacion de template - Archivo : {xlsx} - {datetime.now()}")
 
             result = send_from_directory(data_path, xlsx, as_attachment=True, environ=request.environ)
+            result.headers['filename'] = xlsx
             return result
         except:
             print(sys.exec_prefix())

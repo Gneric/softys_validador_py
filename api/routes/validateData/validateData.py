@@ -3,7 +3,9 @@ import sys
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from flask import request
-from api.services.mySqlConn import checkProcessID, getProcessStructure
+from api.services.mysqlConnection.checkData import checkProcessID
+from api.services.mysqlConnection.getData import getProcessStructure
+
 
 from api.tools.readExcelFile import validateFile
 

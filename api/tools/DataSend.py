@@ -1,6 +1,6 @@
 import pandas as pd
 
-from api.services.sqlConn import insertToTable, executeNamedProcedure
+from api.services.sqlConnection.sqlConn import insertToTable, executeNamedProcedure
 
 from api.constants.sql_tables_info import carga_info
 
