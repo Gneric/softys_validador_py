@@ -36,7 +36,7 @@ def validateDF(json_df, structure):
                 optional = filtered_structure.get('optional')
                 valueType = filtered_structure.get('columnType')
 
-                if optional == False or (optional == True and value != ""):                                                       
+                if optional == 0 or (optional == 1 and value != ""):                                                       
                     # Validaciones comunes
                     checkEmpty = validateEmpty(value, column_name)
                     if checkEmpty != False: 
@@ -53,7 +53,7 @@ def validateDF(json_df, structure):
                 error_message = cvs_row.get('errorMessage')
                 query = 'True if ' + raw_query.replace("{","row.get('").replace("}","')") + ' else False '
                 try:
-                    result_query = exec(query)
+                    result_query = eval(query)
                 except:
                     row_errors.append({
                         'column': 'customValidation',
