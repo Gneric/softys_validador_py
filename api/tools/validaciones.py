@@ -11,8 +11,10 @@ def validateEmpty(value, column_name):
 
 # Validar type
 def validateType(value, valueType, column_name):
-    if valueType in ('date','string'):
+    if valueType in ('string'):
         valueType = 'str'
+    if valueType in ('date'):
+        valueType = 'int'
     if value.__name__ != valueType:
         return {
             'column': column_name,

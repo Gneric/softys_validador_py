@@ -10,7 +10,7 @@ def validateFile(excelFile, structure):
     df_test = df.head(10)
 
     # De Pandas a JSON
-    sjson_df = df_test.to_json(orient="records", date_format='iso')
+    sjson_df = df_test.to_json(orient="records")
     json_df = json.loads(sjson_df)
     
     # Validacion de que la estructura sea la correcta
