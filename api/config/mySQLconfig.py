@@ -19,13 +19,8 @@ mysql_procedures = {
     # DataGetSingle
     "getProcessInfo": "CALL SP_getProcessInfo (%(procID)s);",
     "getGroupInfo": "CALL SP_getGroupInfo (%(grpID)s);",
-    # InsertNewItem
-    "createNewGroup": "CALL SP_createNewGroup (%(grpName)s, %(cliID)s, %(isEnabled)s);",
-    "createNewProcess": "CALL SP_createNewProcess (%(prTypeID)s, %(grpID)s, %(prName)s,  %(isEnabled)s);",
-    "createNewValidation": "CALL SP_createNewValidation (%(prID)s, %(clName)s, %(clNumber)s, %(clType)s, %(opt)s, %(cliID)s, %(customVal)s, %(customValQuery)s, %(errMsg)s);",
-    # UpdateItem
-    "updateGroupInfo": "",
-    "updateProcessInfo": "",
-    "updateValidationInfo": "",
-    # DeleteItem
+    # UpsertItem
+    "upsertGroup": "CALL SP_upsertGroup (%(grpID)s, %(grpName)s, %(cliID)s, %(isEnbld)s);",
+    "upsertProcess": "CALL SP_upsertProcess (%(procID)s, %(procTypeID)s, %(grpID)s, %(procName)s, %(isEnbld)s);",
+    "upsertValidation": "CALL SP_upsertValidation ( %(valID)s, %(procID)s, %(clName)s, %(clNumber)s, %(clType)s, %(opt)s, %(customVal)s, %(customValQuery)s, %(errMsg)s);",
 }

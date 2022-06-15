@@ -125,7 +125,7 @@ def getGroupInfo(groupID):
         cursor = conn.cursor()
         query = mysql_procedures.get(getGroupInfo.__name__)
         print(f'Executing {getGroupInfo.__name__} with {groupID}')
-        cursor.execute(query, { 'groupID': grpID })
+        cursor.execute(query, { 'grpID': groupID })
         result = cursor.fetchall()
         structure = json.loads(result[0][0])
         cursor.close()

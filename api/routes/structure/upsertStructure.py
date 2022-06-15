@@ -3,17 +3,17 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 import json, sys
 
-from api.services.mysqlConnection.insertData import createNewGroup
+from api.services.mysqlConnection.insertData import insertNewProcess, upsertGroup, upsertProcess, upsertValidation
 
 
-class createGroup(Resource):
+class upsertGroups(Resource):
     @jwt_required()
     def post(self):
         try:
             if request.content_type == None:
                 return { "error" : "Content Type Error" }, 400
 
-            data = request.json.get('data', None)
+            data = request.json.get('data', "")
             if data == "":
                 return { 'error': 'data enviada vacia' }, 400
 
@@ -22,48 +22,67 @@ class createGroup(Resource):
             json_token = json.loads(dquoted)
             clientID = json_token.get('clientID')
 
-            result = createNewGroup(data, clientID)
-            if result == "":
-                return { 'error': 'error en la creacion de un nuevo grupo' }, 400
+            result = upsertGroup(data, clientID)
+            if result == False:
+                return { 'error': 'error en la creacion/actualizacion de grupo' }, 400
 
-            return result, 200            
+            return { 'result': 'ok' }, 200
         except:
             print(sys.exc_info())
 
-class createNewProcess(Resource):
+class upsertProcesses(Resource):
     @jwt_required()
     def post(self):
         try:
             if request.content_type == None:
-                return { "error" : "No se encontro archivo excel adjunto" }, 400
+                return { "error" : "Content Type Error" }, 400
 
-            data = request.json.get('data', None)
+            data = request.json.get('data', "")
             if data == "":
                 return { 'error': 'data enviada vacia' }, 400
 
-            # result = (groupID)
-            # if structure == False:
-            #     return { 'error': 'Error on structure return' }, 400
-            # else:
-            #     return structure, 200
+            result = upsertProcess(data)
+            if result == False:
+                return { 'error': 'error en la creacion/actualizacion de grupo' }, 400
+
+            return { 'result': 'ok' }, 200
         except:
             print(sys.exc_info())
 
-class upsertProcess(Resource):
+class upsertValidations(Resource):
     @jwt_required()
     def post(self):
         try:
             if request.content_type == None:
-                return { "error" : "No se encontro archivo excel adjunto" }, 400
+                return { "error" : "Content Type Error" }, 400
 
-            data = request.json.get('data', None)
+            data = request.json.get('data', "")
             if data == "":
                 return { 'error': 'data enviada vacia' }, 400
 
-            # result = (groupID)
-            # if structure == False:
-            #     return { 'error': 'Error on structure return' }, 400
-            # else:
-            #     return structure, 200
+            result = upsertValidation(data)
+            if result == False:
+                return { 'error': 'error en la creacion/actualizacion de grupo' }, 400
+
+            return { 'result': 'ok' }, 200
+        except:
+            print(sys.exc_info())
+
+class newProcess(Resource):
+    @jwt_required()
+    def post(self):
+        try:
+            if request.content_type == None:
+                return { "error" : "Content Type Error" }, 400
+
+            data = request.json.get('data', "")
+            if data == "":
+                return { 'error': 'data enviada vacia' }, 400
+
+            result = insertNewProcess(data)
+            if result == False:
+                return { 'error': 'error en la creacion/actualizacion de grupo' }, 400
+
+            return { 'result': 'ok' }, 200
         except:
             print(sys.exc_info())

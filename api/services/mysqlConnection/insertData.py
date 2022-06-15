@@ -1,39 +1,100 @@
 import json, sys,  mysql.connector
+import os
 from api.config.mySQLconfig import HOST, DB, USER, PWD, mysql_procedures
-    
-def upsertGroupInfo(jsonData):
-    try:
-        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
-        query = mysql_procedures.get(upsertGroupInfo.__name__)
-        print(f'Executing {upsertGroupInfo.__name__} with {len(jsonData)} rows')
-        for row in jsonData:
-            cursor = conn.cursor() 
-            cursor.execute(query, { 'rowData': row })
-            result = cursor.fetchall()
-            structure = json.dumps(result[0][0])
-            cursor.close()
-            del cursor
-            conn.close()
-        return structure
-    except Exception as err:
-        print(f'Error check {upsertGroupInfo.__name__}', err, sys.exc_info())
-        return False
 
-def createNewGroup(data, clientID):
+def upsertGroup(data, clientID):
     try:
-        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
-        query = mysql_procedures.get(createNewGroup.__name__)
-        for row in data:
-            cursor = conn.cursor()
-            cursor.execute(query, { 'grpName': row.get('groupName'), 'cliID': clientID, 'isEnabled': 1 })
-            result = cursor.fetchall()
-            cursor.close()
-            del cursor
-            conn.close()
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD, autocommit=True)
+        query = mysql_procedures.get(upsertGroup.__name__)
+        groupID = data.get('groupID', 999999999)
+        groupName = data.get('groupName')
+        isEnabled = data.get('isEnabled')
+        print(f'Executing {upsertGroup.__name__} with {data} and {clientID}')
+        cursor = conn.cursor()
+        cursor.execute(query, { 'grpID': groupID, 'grpName': groupName, 'cliID': clientID, 'isEnbld':  isEnabled })
+        res = cursor.fetchone()
+        print(res)
+        cursor.close()
+        conn.close()
         return True
     except Exception as err:
-        print(f'Error check {createNewGroup.__name__}', err, sys.exc_info())
+        print(f'Error check {upsertGroup.__name__}', err, sys.exc_info())
         return False
 
+def upsertProcess(data):
+    try:
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD, autocommit=True)
+        query = mysql_procedures.get(upsertProcess.__name__)        
+        print(f'Executing {upsertProcess.__name__} with {data}')
+        cursor = conn.cursor()
+        cursor.execute(query, { 
+            'procID': data.get('processID', 999999999), 
+            'procTypeID': data.get('processTypeID', ''), 
+            'grpID': data.get('grpID', ''),
+            'procName': data.get('processName', ''),
+            'isEnbld': data.get('isEnabled', )
+        })
+        res = cursor.fetchone()
+        print(res)
+        cursor.close()
+        conn.close()
+        return True
+    except Exception as err:
+        print(f'Error check {upsertProcess.__name__}', err, sys.exc_info())
+        return False
     
+def upsertValidation(data):
+    try:
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD, autocommit=True)
+        query = mysql_procedures.get(upsertValidation.__name__)
+        
+        print(f'Executing {upsertValidation.__name__} with {data}')
+        cursor = conn.cursor()
+        for row in data:
+            cursor.execute(query, { 
+                    'valID': row.get('validationStructureID', 999999999), 
+                    'procID': row.get('processID'), 
+                    'clName': row.get('columnName'), 
+                    'clNumber': row.get('columnNumber'),
+                    'clType': row.get('columnType'),
+                    'opt': row.get('optional'),
+                    'customVal': row.get('customValidation'),
+                    'customValQuery': row.get('customValidationQuery'),
+                    'errMsg': row.get('errorMessage'),
+                    })
+            res = cursor.fetchone()
+            print(res)
+        cursor.close()
+        conn.close()
+        return True
+    except Exception as err:
+        print(f'Error check {upsertValidation.__name__}', err, sys.exc_info())
+        return False
+        
+
+def insertNewProcess(data):
+    try:
+        print(f'Executing {insertNewProcess.__name__} with {data}')
+        validation_structure = data.get('validationStructure', '')
+        if validation_structure == "":
+            return False           
+            
+        result = upsertProcess({
+            'procTypeID': data.get('processTypeID'),
+            'grpID': data.get('clientID', ''), 
+            'procName': data.get('processName'),
+            'isEnbld': data.get('isEnabled')
+        })
+        if result != True:
+            return False 
+        
+        result_val = upsertValidation(validation_structure)
+        if result != True:
+            return False
+        
+        return True
+    except Exception as err:
+        print(f'Error check {insertNewProcess.__name__}', err, sys.exc_info())
+        return False
+
 

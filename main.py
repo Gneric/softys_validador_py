@@ -22,6 +22,12 @@ api.add_resource(rts._getValidations, '/api/protected/structure/getValidations')
 
 api.add_resource(rts._getSingleProcess, '/api/protected/structure/getSingleProcess')
 api.add_resource(rts._getSingleGroup, '/api/protected/structure/getSingleGroup')
+
+api.add_resource(rts._upsertGroup, '/api/protected/structure/upsertGroup')
+api.add_resource(rts._upsertProcess, '/api/protected/structure/upsertProcess')
+api.add_resource(rts._upsertValidations, '/api/protected/structure/upsertValidations')
+
+api.add_resource(rts._insertNewProcess, '/api/protected/structure/insertNewProcess')
 # api.add_resource(rts._createItem, '/api/protected/structure/createItem') # Recibe un value con la tabla objetivo + un object con su estructura / retorna json de la estructura completa
 # api.add_resource(rts._deleteItem, '/api/protected/structure/deleteItem') # Recibe un value con la tabla objetivo + id del objeto a eliminar / retorna json de la estructura completa
 # api.add_resource(rts._updateItem, '/api/protected/structure/updateItem') # Recibe un value con la tabla objetivo + un object con su estructura / retorna json de la estructura completa
@@ -42,5 +48,5 @@ api.add_resource(rts._insertData, '/api/protected/dataVal/insertData') # Recibe 
 # api.add_resource(rts._crudDD,'/api/protected/masters/crudDD') # Recibe Array de objetos tipo distribuidora + una key: 'delete', 'add', 'update' la cual dictara que hara el procedure / retorn ok o listado de errores
 
 if __name__ == "__main__":
-    serve(app, host="0.0.0.0", port=3008, threads=8) # Solo para produccion
-    #app.run(host='0.0.0.0', port=3100, debug=True)
+    #serve(app, host="0.0.0.0", port=3008, threads=8) # Solo para produccion
+    app.run(host='0.0.0.0', port=3100, debug=True)
