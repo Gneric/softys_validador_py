@@ -1,6 +1,6 @@
 import json
 import sys
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 from flask import request
 from api.services.mysqlConnection.checkData import checkProcessID
@@ -13,6 +13,11 @@ class validateData(Resource):
     @jwt_required()
     def post(self):
         try:
+            token = get_jwt_identity()
+            dquoted = json.dumps(eval(token))
+            json_token = json.loads(dquoted)
+            credentials = json_token.get('credentials')
+
             # Revision de que el content type sea el correcto
             if request.content_type == None:
                 return { "error" : "No se encontro archivo excel adjunto" }, 400
@@ -33,8 +38,9 @@ class validateData(Resource):
             structure = getProcessStructure(processID)
             if structure == False:
                 return { 'error': 'Error en la busqueda del proceso' }, 400
+
             # Validar archivo enviado con la estructura tomada
-            response = validateFile(file, structure)
+            response = validateFile(file, structure, credentials, processID)
             return response
         except:
             print(sys.exc_info())

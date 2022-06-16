@@ -3,9 +3,64 @@ import sqlalchemy as sa
 import pandas as pd
 
 from api.config.sql_config import connection_string
-
 from api.constants.sql_tables_info import tables_info, carga_info
 
+def insertTemporalData(df: pd.DataFrame, credentials, processID):
+    try:
+        connection_string = (
+            "DRIVER={ODBC Driver 17 for SQL Server};"
+            f"SERVER={credentials.get('server')};"
+            f"DATABASE={credentials.get('database')};"
+            f"UID={credentials.get('user')};PWD={credentials.get('password')};"
+        )
+        connection_uri = f"mssql+pyodbc:///?odbc_connect={urllib.parse.quote_plus(connection_string)}"
+        engine = sa.create_engine(connection_uri, fast_executemany=True)
+        table_name = f'autoservice_{processID}_temp'
+        df.to_sql(table_name, engine, if_exists='replace', index=False, schema='serv')
+        return processID
+    except:
+        print("Unexpected error en func 'insertTemporalData': ", sys.exc_info())
+        return 0
+
+def selectTempIntoTable(credentials, processID):
+    try:
+        control = credentials.get('database')
+        connection_string = (
+            "DRIVER={ODBC Driver 17 for SQL Server};"
+            f"SERVER={credentials.get('server')};"
+            f"DATABASE={control};"
+            f"UID={credentials.get('user')};PWD={credentials.get('password')};"
+        )
+        conn = pyodbc.connect(connection_string)
+        with conn:
+            cursor = conn.cursor()
+            #query = f"INSERT INTO {control}.dbo.autoservice_{processID}_test SELECT * FROM {control}.serv.autoservice_{processID}_temp"
+            cursor.execute("EXEC InsertAutoserviceData @targetTable=?, @fromTable=?", ( f'autoservice_{processID}_test', f'autoservice_{processID}_temp' ))
+            conn.commit()
+        return 1
+    except:
+        print("Unexpected error en func 'selectTempIntoTable': ", sys.exc_info())
+        return 0
+
+def deleteTemporalTable(credentials, processID):
+    try:
+        control = credentials.get('database')
+        connection_string = (
+            "DRIVER={ODBC Driver 17 for SQL Server};"
+            f"SERVER={credentials.get('server')};"
+            f"DATABASE={control};"
+            f"UID={credentials.get('user')};PWD={credentials.get('password')};"
+        )
+        conn = pyodbc.connect(connection_string)
+        with conn:
+            cursor = conn.cursor()
+            query = f"DROP TABLE {control}.serv.autoservice_{processID}_temp"
+            cursor.execute(query)
+            conn.commit()
+        return 1
+    except:
+        print("Unexpected error en func 'deleteTemporalTable': ", sys.exc_info())
+        return 0
 
 # Execute procedure
 def insertToTable(df : pd.DataFrame ):

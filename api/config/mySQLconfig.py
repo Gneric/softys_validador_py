@@ -23,4 +23,8 @@ mysql_procedures = {
     "upsertGroup": "CALL SP_upsertGroup (%(grpID)s, %(grpName)s, %(cliID)s, %(isEnbld)s);",
     "upsertProcess": "CALL SP_upsertProcess (%(procID)s, %(procTypeID)s, %(grpID)s, %(procName)s, %(isEnbld)s);",
     "upsertValidation": "CALL SP_upsertValidation ( %(valID)s, %(procID)s, %(clName)s, %(clNumber)s, %(clType)s, %(opt)s, %(customVal)s, %(customValQuery)s, %(errMsg)s);",
+    # DeleteItem
+    "deleteGroup": "CALL SP_deleteGroup (%(grpID)s);",
+    "deleteProcess": "CALL SP_deleteProcess (%(procID)s);",
+    "deleteValidation": "CALL SP_deleteValidations (%(procID)s);"
 }

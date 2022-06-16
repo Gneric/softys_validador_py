@@ -13,7 +13,6 @@ def upsertGroup(data, clientID):
         cursor = conn.cursor()
         cursor.execute(query, { 'grpID': groupID, 'grpName': groupName, 'cliID': clientID, 'isEnbld':  isEnabled })
         res = cursor.fetchone()
-        print(res)
         cursor.close()
         conn.close()
         return True
@@ -30,12 +29,11 @@ def upsertProcess(data):
         cursor.execute(query, { 
             'procID': data.get('processID', 999999999), 
             'procTypeID': data.get('processTypeID', ''), 
-            'grpID': data.get('grpID', ''),
+            'grpID': data.get('groupID', ''),
             'procName': data.get('processName', ''),
             'isEnbld': data.get('isEnabled', )
         })
         res = cursor.fetchone()
-        print(res)
         cursor.close()
         conn.close()
         return True
@@ -43,7 +41,7 @@ def upsertProcess(data):
         print(f'Error check {upsertProcess.__name__}', err, sys.exc_info())
         return False
     
-def upsertValidation(data):
+def upsertValidation(data, processID):
     try:
         conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD, autocommit=True)
         query = mysql_procedures.get(upsertValidation.__name__)
@@ -53,7 +51,7 @@ def upsertValidation(data):
         for row in data:
             cursor.execute(query, { 
                     'valID': row.get('validationStructureID', 999999999), 
-                    'procID': row.get('processID'), 
+                    'procID': processID, 
                     'clName': row.get('columnName'), 
                     'clNumber': row.get('columnNumber'),
                     'clType': row.get('columnType'),
@@ -63,7 +61,6 @@ def upsertValidation(data):
                     'errMsg': row.get('errorMessage'),
                     })
             res = cursor.fetchone()
-            print(res)
         cursor.close()
         conn.close()
         return True
@@ -80,10 +77,10 @@ def insertNewProcess(data):
             return False           
             
         result = upsertProcess({
-            'procTypeID': data.get('processTypeID'),
-            'grpID': data.get('clientID', ''), 
-            'procName': data.get('processName'),
-            'isEnbld': data.get('isEnabled')
+            'processTypeID': data.get('processTypeID'),
+            'grpID': data.get('groupID', ''), 
+            'processName': data.get('processName'),
+            'isEnabled': data.get('isEnabled')
         })
         if result != True:
             return False 

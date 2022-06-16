@@ -5,6 +5,7 @@ import api.routes.validateData.validateData as route_validateData
 import api.routes.templates.getTemplate as route_template
 import api.routes.structure.getStructure as route_getStructure
 import api.routes.structure.upsertStructure as route_upsertStructure
+import api.routes.structure.deleteStructure as route_deleteStructure
 import api.routes.roles.getRoles as route_getRoles
 
 # Importar todas rutas en una clase para que no se llene de imports main.py
@@ -29,13 +30,9 @@ class Routes():
         self._upsertValidations = route_upsertStructure.upsertValidations
 
         self._insertNewProcess = route_upsertStructure.newProcess
-        # self._createProcess
 
-        # self._updateGroupInfo
-        # self._updateProcessInfo
-        # self._updateValidationInfo
-
-        # self._disableGroup
-        # self._disableProcess
+        self._removeGroup = route_deleteStructure.removeGroup
+        self._removeProcess = route_deleteStructure.removeProcess
+        self._removeValidations = route_deleteStructure.removeValidations
         
         self._getRoles = route_getRoles.getRoles

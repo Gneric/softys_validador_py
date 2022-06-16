@@ -20,6 +20,7 @@ class getListGroups(Resource):
                 return structure, 200
         except:
             print(sys.exc_info())
+            return { 'error': 'unkown error' }, 400
 
 class getListProcesses(Resource):
     @jwt_required()
@@ -39,6 +40,7 @@ class getListProcesses(Resource):
                 return structure, 200
         except:
             print(sys.exc_info())
+            return { 'error': 'unkown error' }, 400
 
 class getListValidations(Resource):
     @jwt_required()

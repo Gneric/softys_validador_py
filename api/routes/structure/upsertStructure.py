@@ -4,7 +4,7 @@ from flask_restful import Resource
 import json, sys
 
 from api.services.mysqlConnection.insertData import insertNewProcess, upsertGroup, upsertProcess, upsertValidation
-
+from api.services.mysqlConnection.deleteData import deleteValidation
 
 class upsertGroups(Resource):
     @jwt_required()
@@ -29,6 +29,7 @@ class upsertGroups(Resource):
             return { 'result': 'ok' }, 200
         except:
             print(sys.exc_info())
+            return { 'error': 'unkown error' }, 400
 
 class upsertProcesses(Resource):
     @jwt_required()
@@ -43,11 +44,12 @@ class upsertProcesses(Resource):
 
             result = upsertProcess(data)
             if result == False:
-                return { 'error': 'error en la creacion/actualizacion de grupo' }, 400
+                return { 'error': 'error en la creacion/actualizacion de proceso' }, 400
 
             return { 'result': 'ok' }, 200
         except:
             print(sys.exc_info())
+            return { 'error': 'unkown error' }, 400
 
 class upsertValidations(Resource):
     @jwt_required()
@@ -60,13 +62,19 @@ class upsertValidations(Resource):
             if data == "":
                 return { 'error': 'data enviada vacia' }, 400
 
-            result = upsertValidation(data)
+            processID = request.json.get('processID', "")
+            if data == "":
+                return { 'error': 'processID no enviado' }, 400
+
+            del_validations = deleteValidation(processID)
+            result = upsertValidation(data, processID)
             if result == False:
-                return { 'error': 'error en la creacion/actualizacion de grupo' }, 400
+                return { 'error': 'error en la creacion/actualizacion de validaciones' }, 400
 
             return { 'result': 'ok' }, 200
         except:
             print(sys.exc_info())
+            return { 'error': 'unkown error' }, 400
 
 class newProcess(Resource):
     @jwt_required()
@@ -86,3 +94,4 @@ class newProcess(Resource):
             return { 'result': 'ok' }, 200
         except:
             print(sys.exc_info())
+            return { 'error': 'unkown error' }, 400

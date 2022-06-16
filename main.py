@@ -28,16 +28,16 @@ api.add_resource(rts._upsertProcess, '/api/protected/structure/upsertProcess')
 api.add_resource(rts._upsertValidations, '/api/protected/structure/upsertValidations')
 
 api.add_resource(rts._insertNewProcess, '/api/protected/structure/insertNewProcess')
-# api.add_resource(rts._createItem, '/api/protected/structure/createItem') # Recibe un value con la tabla objetivo + un object con su estructura / retorna json de la estructura completa
-# api.add_resource(rts._deleteItem, '/api/protected/structure/deleteItem') # Recibe un value con la tabla objetivo + id del objeto a eliminar / retorna json de la estructura completa
-# api.add_resource(rts._updateItem, '/api/protected/structure/updateItem') # Recibe un value con la tabla objetivo + un object con su estructura / retorna json de la estructura completa
+
+api.add_resource(rts._removeGroup, '/api/protected/structure/removeGroup')
+api.add_resource(rts._removeProcess, '/api/protected/structure/removeProcess')
 
 # Templates
-api.add_resource(rts._getTemplate, '/api/protected/templates/getTemplate') # Recibe id de la estructura de validacion / retorna excel
+api.add_resource(rts._getTemplate, '/api/protected/templates/getTemplate')
 
 # Data
-api.add_resource(rts._validateData, '/api/protected/dataVal/validateData') # Recibe id de la estructura de validacion + data / retorna un listado de errors o un totalizado con ok
-api.add_resource(rts._insertData, '/api/protected/dataVal/insertData') # Recibe el nombre de la tabla SQL a la que ingresara + data / retorna un ok o error
+api.add_resource(rts._validateData, '/api/protected/dataVal/validateData')
+api.add_resource(rts._insertData, '/api/protected/dataVal/insertData')
 
 # Alerts
 # # api.add_resource(rts._alerts, '/api/protected/alerts/getAlerts') # ?
