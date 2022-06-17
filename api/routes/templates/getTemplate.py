@@ -8,7 +8,7 @@ from os.path import join
 
 from api.services.mysqlConnection.checkData import checkProcessID
 from api.services.mysqlConnection.getData import getProcessStructure
-from api.tools.createTemplate import createTemplate
+from api.tools.createTemplate import createErrorTemplate, createTemplate
 
 from datetime import datetime
 
@@ -48,5 +48,24 @@ class downloadTemplate(Resource):
         except:
             print(sys.exec_prefix())
             return { 'error': 'error en endpoint downloadTemplate' }, 400
-
+    
+class GenerateErrorTemplate(Resource):
+    @jwt_required()
+    def post(self):
+        try:
+            if request.content_type == None:
+                return { 'error': 'Content Type error' }, 400
+            
+            if 'excel_file' in request.files.keys():
+                file = request.files.get('excel_file')
+            else:
+                return { "error" : "No se encontro archivo excel adjunto" }, 400
+            data = request.json.get('data', None)
+            if data == "":
+                return { 'error': 'data enviado no aceptado' }, 400
+            
+            response = createErrorTemplate(file, data)
+        except:
+            print(sys.exec_prefix())
+            return { 'error': 'error en endpoint downloadTemplate' }, 400
 

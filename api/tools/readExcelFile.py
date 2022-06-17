@@ -5,7 +5,7 @@ from api.services.sqlConnection.sqlConn import insertTemporalData
 
 from api.tools.validaciones import validateDF
 
-def validateFile(excelFile, structure, credentials, processID):
+def validateFile(excelFile, structure, credentials, processID, checkValues):
     structure_data = json.loads(structure[0][0])
     structure_cols = [ x.get('columnName') for x in structure_data.get('validationData') ]
     df_structure = {}
@@ -27,10 +27,17 @@ def validateFile(excelFile, structure, credentials, processID):
         return { 'error': 'El archivo excel no coincide con la estructura' }, 400
 
     errors_found = validateDF(json_df, structure_data.get('validationData'))
+
     if errors_found != []:
         return { 'result': 'error', 'errors': errors_found }, 400
     else:        
         result = insertTemporalData(df_test, credentials, processID)
         if result == 0:
             return { 'error': 'error en la carga de data temporal' }, 400
-        return { 'result': 'ok', 'totales': df_length, 'processID': processID }, 200
+
+        criterios = []
+        if checkValues != []:
+            for val in checkValues:
+                criterios.append({ 'validationName': f'suma{val}', 'value': df[val].sum() })
+
+        return { 'result': 'ok', 'cantidad_filas': df_length, 'criterios_validacion': criterios, 'processID': processID }, 200

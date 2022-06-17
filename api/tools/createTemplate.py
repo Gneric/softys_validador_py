@@ -1,7 +1,36 @@
 import json
 import os
+import pandas as pd
 import xlsxwriter
 
+def createErrorTemplate(file, data):
+    try:
+        df = pd.read_excel(file, sheet_name='data')
+        df_test = df.head(10)
+
+        error_list = [ { 
+            'index': row.get('row'), 
+            'columns': [ c.get('column') for c in row.get('error_details') ]  
+            } for row in data.get('errors') ]
+
+        def highlight_errors(cell):
+            pass
+            # check = False
+            # for e in error_list:
+            #     index = e.get('index')
+            #     columns = e.get('columns')
+            #     if (df.index(row) + 1 == index):
+            #         for c in columns:
+            #             if 
+            # value = row.loc['species']
+            # color = '#FFB3BA'
+            # return ['background-color: {}'.format(color) for r in row]
+            
+
+        #df_test.style.applymap(highlight_errors)
+        pass
+    except:
+        return ''
 
 def createTemplate(structure):
     try:

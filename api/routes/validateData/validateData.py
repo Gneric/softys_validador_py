@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 from flask import request
 from api.services.mysqlConnection.checkData import checkProcessID
-from api.services.mysqlConnection.getData import getProcessStructure
+from api.services.mysqlConnection.getData import getCheckValues, getProcessStructure
 
 
 from api.tools.readExcelFile import validateFile
@@ -38,9 +38,10 @@ class validateData(Resource):
             structure = getProcessStructure(processID)
             if structure == False:
                 return { 'error': 'Error en la busqueda del proceso' }, 400
-
+            # Tomar campos de confirmacion
+            checkValues = getCheckValues(processID)
             # Validar archivo enviado con la estructura tomada
-            response = validateFile(file, structure, credentials, processID)
+            response = validateFile(file, structure, credentials, processID, checkValues)
             return response
         except:
             print(sys.exc_info())

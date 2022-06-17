@@ -31,6 +31,7 @@ def upsertProcess(data):
             'procTypeID': data.get('processTypeID', ''), 
             'grpID': data.get('groupID', ''),
             'procName': data.get('processName', ''),
+            'target': data.get('targetTable', ''),
             'isEnbld': data.get('isEnabled', )
         })
         res = cursor.fetchone()
@@ -80,6 +81,7 @@ def insertNewProcess(data):
             'processTypeID': data.get('processTypeID'),
             'grpID': data.get('groupID', ''), 
             'processName': data.get('processName'),
+            'target': data.get('targetTable'),
             'isEnabled': data.get('isEnabled')
         })
         if result != True:

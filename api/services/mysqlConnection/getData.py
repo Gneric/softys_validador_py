@@ -18,23 +18,6 @@ def getTemplateStructure(procID):
         print(f'Error check {getTemplateStructure.__name__}', err, sys.exc_info())
         return False
 
-def getWholeStructure(cliID):
-    try: 
-        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
-        cursor = conn.cursor()
-        query = mysql_procedures.get(getWholeStructure.__name__)
-        print(f'Executing {getWholeStructure.__name__} with {cliID}')
-        cursor.execute(query, { 'cliID': cliID })
-        result = cursor.fetchall()
-        structure = json.loads(result[0][0])
-        cursor.close()
-        del cursor
-        conn.close()
-        return structure
-    except Exception as err:
-        print(f'Error check {getWholeStructure.__name__}', err, sys.exc_info())
-        return False 
-
 def getGroups(cliID):
     try: 
         conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
@@ -135,3 +118,22 @@ def getGroupInfo(groupID):
     except Exception as err:
         print(f'Error check {getGroupInfo.__name__}', err, sys.exc_info())
         return False 
+
+def getCheckValues(processID):
+    try: 
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
+        cursor = conn.cursor()
+        query = mysql_procedures.get(getCheckValues.__name__)
+        print(f'Executing {getCheckValues.__name__} with {processID}')
+        cursor.execute(query, { 'procID': processID })
+        result = cursor.fetchall()
+        json_result = json.loads(result[0][0])
+        structure = [ c.get('columnName') for c in json_result ]
+        cursor.close()
+        del cursor
+        conn.close()
+        return structure
+    except Exception as err:
+        print(f'Error check {getCheckValues.__name__}', err, sys.exc_info())
+        return False 
+

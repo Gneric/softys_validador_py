@@ -66,3 +66,21 @@ def checkProcessID(procID):
         if conn.is_connected():
             cursor.close()
             conn.close()
+
+def getCheckCustomProcedure(procID):
+    try: 
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
+        cursor = conn.cursor()
+        query = mysql_procedures.get(getCheckCustomProcedure.__name__)
+        print(f'Executing {getCheckCustomProcedure.__name__} with {procID}')
+        cursor.execute(query, { 'procID': procID })
+        result = cursor.fetchall()
+        json_result = json.loads(result[0][0])
+        procedures = [ c.get('customProcedure') for c in json_result ]
+        cursor.close()
+        del cursor
+        conn.close()
+        return procedures
+    except Exception as err:
+        print(f'Error check {getCheckCustomProcedure.__name__}', err, sys.exc_info())
+        return '' 

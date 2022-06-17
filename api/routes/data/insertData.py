@@ -3,6 +3,7 @@ import sys
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
+from api.services.mysqlConnection.checkData import getCheckCustomProcedure
 from api.services.sqlConnection.sqlConn import deleteTemporalTable, selectTempIntoTable
 
 from api.tools.DataSend import sendData
@@ -29,6 +30,7 @@ class insertData(Resource):
             del_res = deleteTemporalTable(credentials, processID)
             if del_res != 1:
                 return { 'error': 'error eliminando la tabla temporal' }, 400
+            customProcedures = getCheckCustomProcedure(processID)            
             return { 'result': 'ok' }
         except:
             print(sys.exc_info())
