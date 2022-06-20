@@ -361,3 +361,28 @@ BEGIN
 	DELETE FROM validationStructure WHERE processID = procID;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE SP_getCheckValues (IN procID int(11) )
+BEGIN
+	SELECT JSON_ARRAYAGG(
+		JSON_OBJECT(
+			'columnName', columnName
+	))
+    FROM validationStructure
+    WHERE processID = procID 
+    AND checkValue = 1
+    AND columnType IN ('int','float');
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE SP_getCheckCustomProcedure (IN procID int(11) )
+BEGIN
+	SELECT customProcedure
+    FROM processes
+    WHERE processID = procID AND isEnabled = 1;
+END //
+DELIMITER ;
+
+SELECT * FROM validationstructure where processID = 4
