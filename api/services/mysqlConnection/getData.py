@@ -137,3 +137,20 @@ def getCheckValues(processID):
         print(f'Error check {getCheckValues.__name__}', err, sys.exc_info())
         return False 
 
+def getTargetTable(processID):
+    try: 
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
+        cursor = conn.cursor()
+        query = mysql_procedures.get(getTargetTable.__name__)
+        print(f'Executing {getTargetTable.__name__} with {processID}')
+        cursor.execute(query, { 'procID': processID })
+        result = cursor.fetchall()
+        structure = json.loads(result[0][0])
+        cursor.close()
+        del cursor
+        conn.close()
+        return structure
+    except Exception as err:
+        print(f'Error check {getTargetTable.__name__}', err, sys.exc_info())
+        return False 
+

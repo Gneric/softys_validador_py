@@ -60,11 +60,18 @@ class GenerateErrorTemplate(Resource):
                 file = request.files.get('excel_file')
             else:
                 return { "error" : "No se encontro archivo excel adjunto" }, 400
-            data = request.json.get('data', None)
+            data = request.form.get('data', None)
             if data == "":
                 return { 'error': 'data enviado no aceptado' }, 400
             
             response = createErrorTemplate(file, data)
+            if response == '':
+                return { 'error': 'error creating error data file' }, 400
+
+            data_path = join(getcwd(),'files')
+            result = send_from_directory(data_path, response, as_attachment=True, environ=request.environ)
+            result.headers['filename'] = response
+            return result
         except:
             print(sys.exec_prefix())
             return { 'error': 'error en endpoint downloadTemplate' }, 400

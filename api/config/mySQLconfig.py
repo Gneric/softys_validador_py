@@ -17,6 +17,7 @@ mysql_procedures = {
     "getValidations": "CALL SP_getValidation (%(processID)s);",
     "getCheckValues": "CALL SP_getCheckValues (%(procID)s);",
     "getCheckCustomProcedure": "CALL SP_getCheckCustomProcedure (%(procID)s)",
+    "getTargetTable": "CALL SP_getTargetTable (%(procID)s)",
     # DataGetSingle
     "getProcessInfo": "CALL SP_getProcessInfo (%(procID)s);",
     "getGroupInfo": "CALL SP_getGroupInfo (%(grpID)s);",

@@ -18,6 +18,7 @@ class Routes():
         self._validateData = route_validateData.validateData
 
         self._getTemplate = route_template.downloadTemplate
+        self._getErrorTemplate = route_template.GenerateErrorTemplate
         self._getGroups = route_getStructure.getListGroups
         self._getProcesses = route_getStructure.getListProcesses
         self._getValidations = route_getStructure.getListValidations

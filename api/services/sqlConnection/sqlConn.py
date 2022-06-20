@@ -22,7 +22,7 @@ def insertTemporalData(df: pd.DataFrame, credentials, processID):
         print("Unexpected error en func 'insertTemporalData': ", sys.exc_info())
         return 0
 
-def selectTempIntoTable(credentials, processID):
+def selectTempIntoTable(credentials, processID, targetTable):
     try:
         control = credentials.get('database')
         connection_string = (
@@ -35,7 +35,7 @@ def selectTempIntoTable(credentials, processID):
         with conn:
             cursor = conn.cursor()
             #query = f"INSERT INTO {control}.dbo.autoservice_{processID}_test SELECT * FROM {control}.serv.autoservice_{processID}_temp"
-            cursor.execute("EXEC InsertAutoserviceData @targetTable=?, @fromTable=?", ( f'autoservice_{processID}_test', f'autoservice_{processID}_temp' ))
+            cursor.execute("EXEC InsertAutoserviceData @targetTable=?, @fromTable=?", ( targetTable, f'autoservice_{processID}_temp' ))
             conn.commit()
         return 1
     except:
@@ -76,24 +76,20 @@ def insertToTable(df : pd.DataFrame ):
         print("Unexpected error en func 'insertToTable': ", sys.exc_info())
         return False
 
-def executeProcedure(target_table : string ):
+def executeProcedure(proc_name):
     try:
         conn = pyodbc.connect(connection_string)
-        tb_info = tables_info.get(target_table)
-        proc_name = tb_info.get('procedure')
         data = []
         with conn:
             cursor = conn.cursor()
             query = "EXEC " + proc_name
             cursor.execute(query)
             rows = cursor.fetchall()
-            for row in rows:
-                data.append(list(row))
             conn.commit() 
             df = pd.DataFrame(data)
             df.columns = [column[0] for column in cursor.description]
             json_df = df.to_json(orient="records")
-            return json_df
+            return True
     except:
         print("Unexpected error en func 'executeProcedure': ", sys.exc_info())
         return False
