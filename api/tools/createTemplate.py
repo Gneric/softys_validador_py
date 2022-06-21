@@ -2,39 +2,44 @@ import json
 import os
 import sys
 import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.styles import PatternFill
 import xlsxwriter
 
 def createErrorTemplate(file, data):
     try:
-        filename = file.filename
+        filename = str(file.filename).replace('.xlsx','-Errors.xlsx')
         filepath = f'files/{filename}'
         df = pd.read_excel(file, sheet_name='data')
-        df_test = df.head(10)
-
+        cols = df.columns
         # Delete if exists
         if os.path.exists(filepath):
             print(f'Deleting {filename}')
             os.remove(filepath)
-        print(1)
+
         error_list = [ { 
             'index': row.get('row'), 
             'columns': [ c.get('column') for c in row.get('error_details') ]  
             } for row in json.loads(data) ]
-        print(error_list)
-        
-        def highlight_errors(row):
-                error_rows = [ e.get('index') +1 for e in error_list]
-                print('error_rows :', [ e.get('index') +1 for e in error_list])
-                for err in error_rows:
-                    print(f'{df_test.index(row) == err} - {df_test.index(row)} - {err}')
-                    if (df_test.index(row) == err):
-                        color = '#FFB3BA'
-                        return 'background-color: {}'.format(color)
 
-        df_test.style.apply(lambda row : highlight_errors(row))
         with pd.ExcelWriter(filepath) as writer:
-            df_test.to_excel(writer, sheet_name='data', index=False)
+            df.to_excel(writer, sheet_name='data', index=False, )
+
+        pttrn = PatternFill("solid", fgColor="FA2222")
+        print(error_list)
+        wb = load_workbook(filename = filepath)
+        ws = wb.active
+        for error in error_list:
+          for row in ws.iter_rows(2):
+            if str(row[0].row) == str(error['index']):
+              for cell in row:
+                if cols[row.index(cell)] in error['columns']:
+                    cell.fill = pttrn
+                
+        wb.save(filepath)            
+
         return filename
+
     except:
         print(f'error in createErrorTemplate {sys.exc_info()}')
         return ''

@@ -64,13 +64,15 @@ class GenerateErrorTemplate(Resource):
             if data == "":
                 return { 'error': 'data enviado no aceptado' }, 400
             
-            response = createErrorTemplate(file, data)
-            if response == '':
+            xlsx = createErrorTemplate(file, data)
+            if xlsx == '':
                 return { 'error': 'error creating error data file' }, 400
 
             data_path = join(getcwd(),'files')
-            result = send_from_directory(data_path, response, as_attachment=True, environ=request.environ)
-            result.headers['filename'] = response
+            
+            
+            result = send_from_directory(data_path, xlsx, as_attachment=True, environ=request.environ)
+            result.headers['filename'] = xlsx
             return result
         except:
             print(sys.exec_prefix())
