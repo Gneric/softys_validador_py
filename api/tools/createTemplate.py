@@ -1,3 +1,4 @@
+from email.quoprimime import header_check
 import json
 import os
 import sys
@@ -15,7 +16,7 @@ def createErrorTemplate(file, data):
         if os.path.exists(filepath):
             print(f'Deleting {filename}')
             os.remove(filepath)
-        print(1)
+        
         error_list = [ { 
             'index': row.get('row'), 
             'columns': [ c.get('column') for c in row.get('error_details') ]  
@@ -30,8 +31,10 @@ def createErrorTemplate(file, data):
                     if (df_test.index(row) == err):
                         color = '#FFB3BA'
                         return 'background-color: {}'.format(color)
+                    else:
+                        return ''
 
-        df_test.style.apply(lambda row : highlight_errors(row))
+        df_test.style.apply(highlight_errors)
         with pd.ExcelWriter(filepath) as writer:
             df_test.to_excel(writer, sheet_name='data', index=False)
         return filename
@@ -74,9 +77,18 @@ def createTemplate(structure):
             'float': float_format,
             'date': date_format
         }
+
+        header_format = workbook.add_format()
+        #header_format.set_pattern(1)
+        header_format.set_bg_color('4682b4')
+        header_format.set_bold()
+        header_format.set_text_wrap()
         
+        
+
         for row in validata:
-            data_ws.write(0, validata.index(row), row.get('columnName'))
+            data_ws.write(0, validata.index(row), row.get('columnName'), header_format)
+            data_ws.write_comment('A1', 'This is a comment')
             data_ws.set_column( 
                 first_col=validata.index(row), 
                 last_col=validata.index(row), 
