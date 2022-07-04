@@ -41,9 +41,10 @@ def validateDF(json_df, structure):
                     checkEmpty = validateEmpty(value, column_name)
                     if checkEmpty != False: 
                         row_errors.append(checkEmpty)
-                    checkType = validateType(type(value), valueType, column_name)
-                    if checkType != False: 
-                        row_errors.append(checkType)
+                    else:
+                        checkType = validateType(type(value), valueType, column_name)
+                        if checkType != False:
+                            row_errors.append(checkType)
 
             # Custom Validations
             custom_val_structure = list(filter(lambda obj: obj.get('customValidation') == 1, structure))

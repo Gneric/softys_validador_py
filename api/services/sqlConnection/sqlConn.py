@@ -90,6 +90,9 @@ def executeProcedure(proc_name):
             df.columns = [column[0] for column in cursor.description]
             json_df = df.to_json(orient="records")
             return True
+    except pyodbc.Error as ex:
+        sqlstate = ex.args[1]
+        return sqlstate
     except:
         print("Unexpected error en func 'executeProcedure': ", sys.exc_info())
         return False
