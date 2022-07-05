@@ -16,11 +16,19 @@ def validateType(value, valueType, column_name):
     if valueType in ('date'):
         valueType = 'int'
     if value.__name__ != valueType:
-        return {
-            'column': column_name,
-            'error_type': 'Error en tipo de dato',
-            'error_message': f'El tipo de dato es erroneo, se espero {valueType} pero se envio {value.__name__}'
-        }
+        try:
+            if valueType == 'float':
+                float(value)
+            if valueType == 'int':
+                int(value)
+            if valueType == 'string':
+                str(value)
+        except:
+            return {
+                'column': column_name,
+                'error_type': 'Error en tipo de dato',
+                'error_message': f'El tipo de dato es erroneo, se espero {valueType} pero se envio {value.__name__}'
+            }
 
 # Validar row
 def validateDF(json_df, structure):
@@ -55,17 +63,17 @@ def validateDF(json_df, structure):
                 query = 'True if ' + raw_query.replace("{","row.get('").replace("}","')") + ' else False '
                 try:
                     result_query = eval(query)
+                    if result_query == False:
+                        row_errors.append({
+                            'column': csv_row_name,
+                            'error_type': 'customValidation Error',
+                            'error_message': f'{error_message}'
+                        })
                 except:
                     row_errors.append({
                         'column': 'customValidation',
                         'error_type': 'Error en la query',
-                        'error_message': f'La query ingresada es erronea'
-                    })
-                if result_query == False:
-                    row_errors.append({
-                        'column': csv_row_name,
-                        'error_type': 'customValidation Error',
-                        'error_message': f'{error_message}'
+                        'error_message': 'La query ingresada por el fidelizador es erronea'
                     })
 
             row_errors = [i for i in row_errors if i]

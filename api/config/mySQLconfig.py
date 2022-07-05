@@ -1,4 +1,4 @@
-HOST = "147.135.4.60"
+HOST = "51.222.82.147"
 PORT = "3306"
 USER = "root"
 PWD = "V1d4S0ftw4r3!"
