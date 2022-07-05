@@ -47,5 +47,6 @@ api.add_resource(rts._insertData, '/api/protected/dataVal/insertData')
 # api.add_resource(rts._crudDD,'/api/protected/masters/crudDD') # Recibe Array de objetos tipo distribuidora + una key: 'delete', 'add', 'update' la cual dictara que hara el procedure / retorn ok o listado de errores
 
 if __name__ == "__main__":
+    # SERVE SOLO PARA PRODUCCION
     serve(app, host="0.0.0.0", port=3008, threads=8) # Solo para produccion
     #app.run(host='0.0.0.0', port=3100, debug=True)
