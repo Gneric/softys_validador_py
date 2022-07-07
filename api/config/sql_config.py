@@ -1,9 +1,9 @@
 sql_config = {
     1: {
-        "user": "db_admin",
-        "password": "lKKjInmj7h3h5Yk@j0",
+        "user": "sa",
+        "password": "2bhDcn2y",
         "database": "STRATEGIO_CONTROL_SOFTYSI",
-        "server": "51.222.152.125",
+        "server": "147.135.4.52",
         "pool": {
           "max": 10,
           "min": 0,
