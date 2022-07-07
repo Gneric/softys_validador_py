@@ -145,7 +145,7 @@ def getTargetTable(processID):
         print(f'Executing {getTargetTable.__name__} with {processID}')
         cursor.execute(query, { 'procID': processID })
         result = cursor.fetchall()
-        structure = json.loads(result[0][0])
+        structure = result[0][0]
         cursor.close()
         del cursor
         conn.close()

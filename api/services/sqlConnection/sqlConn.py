@@ -34,6 +34,7 @@ def selectTempIntoTable(credentials, processID, targetTable):
         conn = pyodbc.connect(connection_string)
         with conn:
             cursor = conn.cursor()
+            print( targetTable, f'autoservice_{processID}_temp')
             #query = f"INSERT INTO {control}.dbo.autoservice_{processID}_test SELECT * FROM {control}.serv.autoservice_{processID}_temp"
             cursor.execute("EXEC InsertAutoserviceData @targetTable=?, @fromTable=?", ( targetTable, f'autoservice_{processID}_temp' ))
             conn.commit()

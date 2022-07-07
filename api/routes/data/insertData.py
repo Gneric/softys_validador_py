@@ -28,7 +28,7 @@ class insertData(Resource):
 
             result = selectTempIntoTable(credentials, processID, targetTable)
             if result != 1:
-                return { 'error': 'error en la insercion de data' }, 400
+                return { 'error': f'error en la insercion de data' }, 400
             del_res = deleteTemporalTable(credentials, processID)
             if del_res != 1:
                 return { 'error': 'error eliminando la tabla temporal' }, 400
