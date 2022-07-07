@@ -1,8 +1,9 @@
 import sys
+from types import NoneType
 
-empty_values_list = ["",None,"nan"]
+empty_values_list = ["","None","nan","null", 0, None]
 def validateEmpty(value, column_name):
-    if value in empty_values_list:
+    if str(value) in empty_values_list:
        return {
             'column': column_name,
             'error_type': 'Valor vacio',
@@ -60,7 +61,11 @@ def validateDF(json_df, structure):
                 csv_row_name = cvs_row.get('columnName')
                 raw_query = cvs_row.get('customValidationQuery')
                 error_message = cvs_row.get('errorMessage')
-                query = 'True if ' + raw_query.replace("{","row.get('").replace("}","')") + ' else False '
+
+                def emptyCheck(value):
+                    return '' if value in empty_values_list else value
+                
+                query = 'True if ' + raw_query.replace("{","emptyCheck(row.get('").replace("}","'))") + ' else False '
                 try:
                     result_query = eval(query)
                     if result_query == False:
