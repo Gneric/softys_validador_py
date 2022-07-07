@@ -5,7 +5,7 @@ import pandas as pd
 from api.config.sql_config import connection_string
 from api.constants.sql_tables_info import tables_info, carga_info
 
-def insertTemporalData(df: pd.DataFrame, credentials, processID):
+def insertTemporalData(df: pd.DataFrame, credentials, processID, dataTypes):
     try:
         connection_string = (
             "DRIVER={ODBC Driver 17 for SQL Server};"
@@ -34,7 +34,6 @@ def selectTempIntoTable(credentials, processID, targetTable):
         conn = pyodbc.connect(connection_string)
         with conn:
             cursor = conn.cursor()
-            print( targetTable, f'autoservice_{processID}_temp')
             #query = f"INSERT INTO {control}.dbo.autoservice_{processID}_test SELECT * FROM {control}.serv.autoservice_{processID}_temp"
             cursor.execute("EXEC InsertAutoserviceData @targetTable=?, @fromTable=?", ( targetTable, f'autoservice_{processID}_temp' ))
             conn.commit()
@@ -98,9 +97,15 @@ def executeProcedure(proc_name):
         print("Unexpected error en func 'executeProcedure': ", sys.exc_info())
         return False
 
-def executeNamedProcedure(procedure : string):
+def executeNamedProcedure(credentials, procedure : string):
     try:
-        conn = pyodbc.connect(connection_string)
+        conn_string = (
+            "DRIVER={ODBC Driver 17 for SQL Server};"
+            f"SERVER={credentials.get('server')};"
+            f"DATABASE={credentials.get('database')};"
+            f"UID={credentials.get('user')};PWD={credentials.get('password')};"
+        )
+        conn = pyodbc.connect(conn_string)
         with conn:
             cursor = conn.cursor()
             query = "EXEC " + procedure
@@ -108,7 +113,7 @@ def executeNamedProcedure(procedure : string):
             conn.commit() 
             return True
     except:
-        print("Unexpected error en func 'executeProcedure': ", sys.exc_info())
+        print("Unexpected error en func 'executeNamedProcedure': ", sys.exc_info())
         return False
 
 

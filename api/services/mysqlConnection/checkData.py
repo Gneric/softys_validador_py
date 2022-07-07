@@ -75,12 +75,11 @@ def getCheckCustomProcedure(procID):
         print(f'Executing {getCheckCustomProcedure.__name__} with {procID}')
         cursor.execute(query, { 'procID': procID })
         result = cursor.fetchall()
-        json_result = json.loads(result[0][0])
-        procedures = [ c.get('customProcedure') for c in json_result ]
+        res = result[0][0]
         cursor.close()
         del cursor
         conn.close()
-        return procedures
+        return res
     except Exception as err:
         print(f'Error check {getCheckCustomProcedure.__name__}', err, sys.exc_info())
         return '' 

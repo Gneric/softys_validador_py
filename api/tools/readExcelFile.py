@@ -14,7 +14,6 @@ def validateFile(excelFile, structure, credentials, processID, checkValues):
 
     df = pd.read_excel(excelFile, sheet_name='data', dtype=df_structure)
     df_length = len(df)
-
     # De Pandas a JSON
     sjson_df = df.to_json(orient="records")
     json_df = json.loads(sjson_df)
@@ -29,8 +28,9 @@ def validateFile(excelFile, structure, credentials, processID, checkValues):
 
     if errors_found != []:
         return { 'result': 'error', 'errors': errors_found }, 400
-    else:        
-        result = insertTemporalData(df, credentials, processID)
+    else:
+        dataTypes = [ { x.get('columnName') : x.get('columnType') } for x in structure_data.get('validationData') ]
+        result = insertTemporalData(df, credentials, processID, dataTypes)
         if result == 0:
             return { 'error': 'error en la carga de data temporal' }, 400
 

@@ -1,5 +1,6 @@
+import json
 import sys
-from types import NoneType
+import pandas as pd
 
 empty_values_list = ["","None","nan","null", 0, None]
 def validateEmpty(value, column_name):
@@ -89,4 +90,5 @@ def validateDF(json_df, structure):
             print(sys.exc_info())
         finally:
             index = index + 1
+
     return errors

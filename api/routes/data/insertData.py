@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 from api.services.mysqlConnection.checkData import getCheckCustomProcedure
 from api.services.mysqlConnection.getData import getTargetTable
-from api.services.sqlConnection.sqlConn import deleteTemporalTable, executeProcedure, selectTempIntoTable
+from api.services.sqlConnection.sqlConn import deleteTemporalTable, executeNamedProcedure, executeProcedure, selectTempIntoTable
 
 from api.tools.DataSend import sendData
 
@@ -35,7 +35,7 @@ class insertData(Resource):
 
             customProcedures = getCheckCustomProcedure(processID)
             if customProcedures != '':
-                check = executeProcedure(customProcedures)
+                check = executeNamedProcedure(credentials, customProcedures)
                 if check != True:
                     return { 'error': f'error executing {customProcedures}' }, 400
 
