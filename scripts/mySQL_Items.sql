@@ -82,20 +82,20 @@ INSERT INTO ValidationStructure (processID, columnName, columnNumber, columnType
 INSERT INTO ValidationStructure (processID, columnName, columnNumber, columnType, optional, checkValue, customValidation, customValidationQuery, errorMessage) VALUES 
 (4,'CodigoDistribuidor', 1, 'string', 0, 0, 0, '', ''),
 (4,'Fecha', 2, 'date', 0, 0, 0, '', ''),
-(4,'NroFactura', 3, 'string', 0, 0, 0, '', ''),
+(4,'NroFactura', 3, 'string', 1, 0, 1, '"NC" not in {NroFactura} and {PrecioTotalSinIGV} > 0', 'Las notas de credito solo pueden tener un precio total negativo'),
 (4,'CodigoCliente', 4, 'string', 0, 0, 0, '', ''),
-(4,'RUC', 5, 'string', 0, 0, 0, '', ''),
-(4,'RazonSocial', 6, 'string', 0, 0, 0, '', ''),
-(4,'Mercado/Categoria/Tipo', 7, 'string', 0 , 0,0, '', ''),
+(4,'RUC', 5, 'string', 1, 0, 0, '', ''),
+(4,'RazonSocial', 6, 'string', 1, 0, 0, '', ''),
+(4,'Mercado/Categoria/Tipo', 7, 'string', 1, 0,0, '', ''),
 (4,'CodigoVendedorDistribuidor', 8, 'string', 0 , 0,0, '', ''),
-(4,'DNIVendedorDistribuidor', 9, 'string', 0 , 0,0, '', ''),
-(4,'NombreVendedorDistribuidor', 10, 'string', 0 , 0,0, '', ''),
+(4,'DNIVendedorDistribuidor', 9, 'string', 1, 0, 1, 'len(str({DNIVendedorDistribuidor})) <= 15', 'El campo DNI solo acepta hasta 15 caracteres'),
+(4,'NombreVendedorDistribuidor', 10, 'string', 1, 0,0, '', ''),
 (4,'CodigoProducto', 11, 'string', 0 , 0,0, '', ''),
 (4,'DescripcionProducto', 12, 'string', 0 , 0,0, '', ''),
 (4,'Cantidad', 13, 'int', 0 , 1, 0, '', ''),
 (4,'UnidadDeMedida', 14, 'string', 0, 0, 0, '', ''),
-(4,'PrecioUnitario', 15, 'int', 0, 0, 0, '', ''),
-(4,'PrecioTotalSinIGV', 16, 'int', 0, 1, 0, '', '');
+(4,'PrecioUnitario', 15, 'float', 0, 0, 0, '', ''),
+(4,'PrecioTotalSinIGV', 16, 'float', 0, 1, 1, 'round({Cantidad} * {PrecioUnitario}, 2) == round({PrecioTotalSinIGV}, 2)', 'El precio total sin IGV debe ser igual al precio unitario x cantidad');
 
 
 /*

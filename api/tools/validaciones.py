@@ -69,11 +69,12 @@ def validateDF(json_df, structure):
                             'error_type': 'customValidation Error',
                             'error_message': f'{error_message}'
                         })
-                except:
+                    
+                except Exception as err:
                     row_errors.append({
                         'column': 'customValidation',
-                        'error_type': 'Error en la query',
-                        'error_message': 'La query ingresada por el fidelizador es erronea'
+                        'error_type': 'Error en la validacion',
+                        'error_message': f'Una validacion ingresada por el fidelizador es erronea: {err}'
                     })
 
             row_errors = [i for i in row_errors if i]

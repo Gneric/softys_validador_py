@@ -13,15 +13,14 @@ def validateFile(excelFile, structure, credentials, processID, checkValues):
         df_structure.update({ x.get('columnName') : object })
 
     df = pd.read_excel(excelFile, sheet_name='data', dtype=df_structure)
-    df_test = df.head(10)
-    df_length = len(df_test)
+    df_length = len(df)
 
     # De Pandas a JSON
-    sjson_df = df_test.to_json(orient="records")
+    sjson_df = df.to_json(orient="records")
     json_df = json.loads(sjson_df)
     
     # Validacion de que la estructura sea la correcta
-    file_cols = list(df_test.columns)
+    file_cols = list(df.columns)
     
     if file_cols != structure_cols:
         return { 'error': 'El archivo excel no coincide con la estructura' }, 400
@@ -31,7 +30,7 @@ def validateFile(excelFile, structure, credentials, processID, checkValues):
     if errors_found != []:
         return { 'result': 'error', 'errors': errors_found }, 400
     else:        
-        result = insertTemporalData(df_test, credentials, processID)
+        result = insertTemporalData(df, credentials, processID)
         if result == 0:
             return { 'error': 'error en la carga de data temporal' }, 400
 
