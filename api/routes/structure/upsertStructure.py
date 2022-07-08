@@ -2,6 +2,7 @@ from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 import json, sys
+from api.services.mysqlConnection.getData import getValidations
 
 from api.services.mysqlConnection.insertData import insertNewProcess, upsertGroup, upsertProcess, upsertValidation
 from api.services.mysqlConnection.deleteData import deleteValidation
@@ -66,11 +67,12 @@ class upsertValidations(Resource):
             if data == "":
                 return { 'error': 'processID no enviado' }, 400
 
+            old_validations = getValidations(processID)
             del_validations = deleteValidation(processID)
             result = upsertValidation(data, processID)
             if result == False:
+                upsertValidation(old_validations['validationData'], processID)
                 return { 'error': 'error en la creacion/actualizacion de validaciones' }, 400
-
             return { 'result': 'ok' }, 200
         except:
             print(sys.exc_info())

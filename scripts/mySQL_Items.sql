@@ -311,7 +311,7 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE SP_upsertValidation ( valID int(11),  procID int(11), clName varchar(100), clNumber int(11), clType varchar(100), opt int(1), val int(1), customVal int(1), customValQuery varchar(500), errMsg varchar(100) )
+CREATE PROCEDURE SP_upsertValidation ( IN valID int(11),  procID int(11), clName varchar(100), clNumber int(11), clType varchar(100), opt int(1), val int(1), customVal int(1), customValQuery varchar(500), errMsg varchar(100) )
 BEGIN
 	IF EXISTS ( SELECT * FROM validationstructure WHERE validationStructureID = valID LIMIT 1 ) THEN
 		BEGIN

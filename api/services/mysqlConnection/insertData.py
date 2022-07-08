@@ -44,26 +44,25 @@ def upsertProcess(data):
     
 def upsertValidation(data, processID):
     try:
-        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD, autocommit=True)
+        conn = mysql.connector.connect(host=HOST,database=DB,user=USER,password=PWD)
         query = mysql_procedures.get(upsertValidation.__name__)
-        
-        print(f'Executing {upsertValidation.__name__} with {data}')
+        print(f'Executing {upsertValidation.__name__} for  {processID}')
+        val = [{
+                'valID': row.get('validationStructureID', 999999999),
+                'procID': processID, 
+                'clName': row.get('columnName'), 
+                'clNumber': row.get('columnNumber'),
+                'clType': row.get('columnType'),
+                'opt': row.get('optional'),
+                'val': row.get('checkValue'),
+                'customVal': row.get('customValidation'),
+                'customValQuery': row.get('customValidationQuery'),
+                'errMsg': row.get('errorMessage')
+            } for row in data ]
         cursor = conn.cursor()
-        for row in data:
-            cursor.execute(query, { 
-                    'valID': row.get('validationStructureID', 999999999), 
-                    'procID': processID, 
-                    'clName': row.get('columnName'), 
-                    'clNumber': row.get('columnNumber'),
-                    'clType': row.get('columnType'),
-                    'opt': row.get('optional'),
-                    'customVal': row.get('customValidation'),
-                    'customValQuery': row.get('customValidationQuery'),
-                    'errMsg': row.get('errorMessage'),
-                    })
-            res = cursor.fetchone()
+        cursor.executemany(query, val)
         cursor.close()
-        conn.close()
+        conn.commit()
         return True
     except Exception as err:
         print(f'Error check {upsertValidation.__name__}', err, sys.exc_info())
