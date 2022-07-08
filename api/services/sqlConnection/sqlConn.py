@@ -111,10 +111,13 @@ def executeNamedProcedure(credentials, procedure : string):
             query = "EXEC " + procedure
             cursor.execute(query)
             conn.commit() 
-            return True
+            return True, ''
+    except pyodbc.Error as ex:
+        sqlstate = ex.args[1]
+        return False, sqlstate
     except:
         print("Unexpected error en func 'executeNamedProcedure': ", sys.exc_info())
-        return False
+        return False, ''
 
 
     

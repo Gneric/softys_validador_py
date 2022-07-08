@@ -10,6 +10,7 @@ mysql_procedures = {
     "checkUser": "CALL SP_UserCheck (%(user)s, %(pwd)s);",
     "checkProcessID": "CALL SP_verifyProcessID (%(procID)s);",
     "checkRoles": "CALL SP_checkRoles (%(roleNameInput)s);",
+    "writeLog": "CALL SP_writeLog(%(username)s, %(endpoint)s, %(success)s, %(error_on)s, %(error_msg)s, %(actionTime)s);",
     # DataGet
     "getProcessStructure": "CALL SP_getProcessStructure (%(procID)s);",
     "getGroups": "CALL SP_getGroups (%(cliID)s);",

@@ -35,9 +35,12 @@ class insertData(Resource):
 
             customProcedures = getCheckCustomProcedure(processID)
             if customProcedures != '':
-                check = executeNamedProcedure(credentials, customProcedures)
+                check, errors = executeNamedProcedure(credentials, customProcedures)
                 if check != True:
-                    return { 'error': f'error executing {customProcedures}' }, 400
+                    if errors not in ('', []):
+                        return { 'errors': errors }, 400
+                    else:
+                        return { 'error': f'error executing {customProcedures}' }, 400
 
             return { 'result': 'ok' }, 200
         except:

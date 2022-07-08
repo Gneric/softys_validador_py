@@ -7,10 +7,8 @@ app, api = createApp(__name__)
 # Instanciamiento de Rutas
 rts = Routes()
 
-# getToken
+# Login
 api.add_resource(rts._token, '/api/getToken')
-
-# Roles
 api.add_resource(rts._getRoles, '/api/protected/roles/getRoles')
 
 # Structure
