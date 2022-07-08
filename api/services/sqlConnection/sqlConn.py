@@ -114,8 +114,7 @@ def executeNamedProcedure(credentials, procedure : string):
             return True, ''
     except pyodbc.Error as ex:
         sqlstate = ex.args[1]
-        msg = (sqlstate.split('[SQL Server]')[1]).split('(')[0]
-        return False, msg
+        return False, sqlstate
     except:
         print("Unexpected error en func 'executeNamedProcedure': ", sys.exc_info())
         return False, ''
